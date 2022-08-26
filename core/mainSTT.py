@@ -1,5 +1,5 @@
-import tensorflow
-import torchaudio
+#import tensorflow
+#import torchaudio
 from datasets import load_dataset, load_metric
 from transformers import (
     Wav2Vec2ForCTC,
@@ -9,6 +9,9 @@ import torch
 import re
 import sys
 import librosa
+
+def transcribe(audio_filepath: str) -> str:
+    pass
 
 def main():
     model_name = "facebook/wav2vec2-large-xlsr-53-italian"

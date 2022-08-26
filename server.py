@@ -1,10 +1,18 @@
-from flask import Flask
+import uuid
+from flask import Flask, request
+
+from core.mainSTT import transcribe
 
 app = Flask(__name__)
 
 @app.route('/api/stt', methods=['POST'])
 def stt_controller():
-    pass
+    audio = request.data
+    filename = uuid.uuid4().__str__
+    with open(f'data/{filename}', 'wb') as f:
+        f.write(audio)
+    
+    return transcribe(audio_filepath=filename)
 
 
 def main():
