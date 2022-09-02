@@ -12,6 +12,7 @@ MAX_FILE_SIZE_MB = int(os.environ.get('MAX_FILE_SIZE_MB', default=5))
 
 print("MAX_FILE_SIZE_MB:", MAX_FILE_SIZE_MB)
 
+
 @app.route('/api/stt', methods=['POST'])
 def stt_controller():
     audio = request.data
@@ -25,7 +26,7 @@ def stt_controller():
         filename = str(uuid.uuid4())
         with open(f'data/{filename}', 'wb') as f:
             f.write(audio)
-        
+
         try:
             temp_res = transcribe(audio_filepath=f'data/{filename}')
             res.extend(temp_res)
@@ -39,7 +40,8 @@ def stt_controller():
         "status": "OK" if res else "KO",
         "data": '\n\n'.join(res),
         "error-message": error_message
-        }), status=200 if res else 500)
+    }), status=200 if res else 500)
+
 
 def main():
     app.run(
@@ -49,5 +51,6 @@ def main():
         load_dotenv=True
     )
 
-if (__name__=='__main__'):
+
+if __name__ == '__main__':
     main()

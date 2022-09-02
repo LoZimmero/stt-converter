@@ -1,14 +1,9 @@
-# import tensorflow
-# import torchaudio
-from datasets import load_dataset, load_metric
+import librosa
+import torch
 from transformers import (
     Wav2Vec2ForCTC,
     Wav2Vec2Processor,
 )
-import torch
-import re
-import sys
-import librosa
 
 model_name = "facebook/wav2vec2-large-xlsr-53-italian"
 device = "cuda" if torch.cuda.is_available() else "cpu"
