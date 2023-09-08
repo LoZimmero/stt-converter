@@ -45,9 +45,9 @@ def stt_controller():
 
 def main():
     app.run(
-        host='localhost',
+        host='0.0.0.0',
         port=9999,
-        debug=True,
+        debug=False,
         load_dotenv=True
     )
 
