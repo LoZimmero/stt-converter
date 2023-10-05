@@ -42,6 +42,9 @@ def stt_controller():
         "error-message": error_message
     }), status=200 if res else 500)
 
+@app.route("/", methods=["GET"])
+def index() -> Response:
+    return Response("<h1>Welcome!</h1><h2>API is at edpoint <b>/api/stt</b></h2>", status=200)
 
 def main():
     app.run(
