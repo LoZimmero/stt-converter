@@ -12,7 +12,7 @@ model = Wav2Vec2ForCTC.from_pretrained(model_name).to(device)
 processor = Wav2Vec2Processor.from_pretrained(model_name)
 
 
-def split(file_data: bytes, max_file_size: int) -> list[bytes]:
+def split(file_data: bytes, max_file_size: int) -> list:
     res = []
     for i in range(0, len(file_data), max_file_size):
         res.append(file_data[i:i + max_file_size])
