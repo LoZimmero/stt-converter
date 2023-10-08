@@ -12,10 +12,12 @@ colorama==0.4.5
 datasets==2.4.0
 decorator==5.1.1
 dill==0.3.5.1
+ffmpeg-python==0.2.0
 filelock==3.8.0
 Flask==2.2.2
 frozenlist==1.3.1
 fsspec==2022.7.1
+future==0.18.3
 huggingface-hub==0.9.1
 idna==3.3
 importlib-metadata==4.12.0
@@ -31,6 +33,7 @@ numba==0.56.0
 numpy==1.22.4
 packaging==21.3
 pandas==1.4.3
+platformdirs==3.11.0
 pooch==1.6.0
 pyarrow==9.0.0
 pycparser==2.21
@@ -51,7 +54,8 @@ tokenizers==0.12.1
 torch==1.12.1
 tqdm==4.64.0
 transformers==4.21.2
-typing-extensions==4.3.0
+typing_extensions==4.3.0
+tzdata==2023.3
 urllib3==1.26.12
 Werkzeug==2.2.2
 xxhash==3.0.0

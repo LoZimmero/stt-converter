@@ -36,9 +36,12 @@ def stt_controller():
         finally:
             os.remove(f'data/{filename}')
 
+    string_result = ''.join(res)
+    print(type(string_result))
     return Response(json.dumps({
         "status": "OK" if res else "KO",
-        "data": '\n\n'.join(res),
+        #old code "data": '\n\n'.join(res),
+        "data":string_result,
         "error-message": error_message
     }), status=200 if res else 500)
 
