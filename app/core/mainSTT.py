@@ -8,6 +8,7 @@ from transformers import (
 )
 
 MODEL = "whisper"
+whisper_size="tiny"
 already_chunked= True
 
 model_name = "facebook/wav2vec2-large-xlsr-53-italian"
@@ -43,7 +44,7 @@ def transcribe(audio_filepath: str) -> str:
         return transcription
     elif(already_chunked==False):
         # Carica il modello Whisper
-        model = whisper.load_model("base").to(device)
+        model = whisper.load_model(whisper_size).to(device)
 
         # Carica il file audio
         print("Caricamento audio...")
@@ -113,7 +114,7 @@ def transcribe(audio_filepath: str) -> str:
         print("Trascrizione completata!")
         return transcription
     else:
-        model = whisper.load_model("medium").to(device)
+        model = whisper.load_model(whisper_size).to(device)
         result = model.transcribe(audio_filepath)
         print(result['text'])
         return result["text"]
