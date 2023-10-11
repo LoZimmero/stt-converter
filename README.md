@@ -25,3 +25,4 @@ Il comando da utilizzare è:
 ```
 pytest --cov --cov-report=html:coverage_re
 ```
+**Nota**: E' importante eseguire il comando a livello di root del progetto, ovvero dalla cartella stt, poiché i test usano path relativi per recuperare i files necessari all'esecuzione.
