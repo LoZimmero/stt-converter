@@ -38,7 +38,8 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Install audio tool
       run: |
-        apt-get install libsndfile1-dev
+        sudo apt-get update
+        sudo apt-get install -y libsndfile1-dev
     - name: Test with pytest and generate coverage report
       run: |
         pytest --cov --cov-report=html:coverage_re
