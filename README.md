@@ -18,7 +18,7 @@ Basta eseguire il file *server.py*
 
 Basta eseguire il file *test/send_data.py"*
 
-## 4. Unit tests e come eseguirli
+## 4. Tests e come eseguirli
 Nella cartella *app/tests* possiamo inserire test unitari e di integrazione. <br>
 Per poterli eseguire, bisogna avere installati i moduli *pytest* e *pytest-cov* (per avere la coverage).<br>
 Il comando da utilizzare è:
