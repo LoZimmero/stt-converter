@@ -36,17 +36,18 @@ def create_app():
                 break
             finally:
                 os.remove(f'data/{filename}')
-
-        return Response(json.dumps({
-            "status": "OK" if res else "KO",
-            "data": '\n\n'.join(res),
-            "error-message": error_message
-        }), status=200 if res else 500)
+    string_result = ''.join(res)
+    return Response(json.dumps({
+        "status": "OK" if res else "KO",
+        # old code "data": '\n\n'.join(res),
+        "data": string_result,
+        "error-message": error_message
+    }), status=200 if res else 500)
 
     @app.route("/", methods=["GET"])
     def index() -> Response:
         return Response("<h1>Welcome!</h1><h2>API is at edpoint <b>/api/stt</b></h2>", status=200)
-    
+
     return app
 
 def main():
