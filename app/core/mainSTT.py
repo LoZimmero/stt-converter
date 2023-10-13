@@ -1,5 +1,7 @@
 import librosa
 import torch
+import whisper
+
 from transformers import (
     Wav2Vec2ForCTC,
     Wav2Vec2Processor,
