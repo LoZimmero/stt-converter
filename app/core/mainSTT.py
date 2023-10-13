@@ -1,6 +1,7 @@
 import librosa
 import torch
 import whisper
+from pydub import silence, AudioSegment
 
 from transformers import (
     Wav2Vec2ForCTC,
@@ -8,7 +9,7 @@ from transformers import (
 )
 
 MODEL = "whisper"
-whisper_size="tiny"
+whisper_size="medium"
 already_chunked= True
 
 model_name = "facebook/wav2vec2-large-xlsr-53-italian"

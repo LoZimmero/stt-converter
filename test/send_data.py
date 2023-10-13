@@ -1,39 +1,85 @@
+import time
+
+import numpy as np
 import requests
+from pydub import AudioSegment
+from pydub.generators import WhiteNoise
 
-filedata = open('../core/Recording 2023-10-07 17_51_02.wav', 'rb').read()
+def apply_noise(audio, noise_level):
+    # Calcola la durata dell'audio in millisecondi
+    duration_ms = len(audio)
 
+    # Crea un generatore di rumore bianco della stessa durata dell'audio
+    noise = WhiteNoise().to_audio_segment(duration=duration_ms)
+
+    # Imposta il volume del rumore proporzionalmente al valore di noise_level
+    noise_gain = audio.dBFS - 20 * np.log10(1/noise_level)
+    noise = noise.apply_gain(noise_gain - noise.dBFS)
+
+    # Combina l'audio originale con il rumore
+    mixed_audio = audio.overlay(noise)
+
+    return mixed_audio
+
+
+
+def change_amplitude(audio, gain_in_dB):
+    """
+    Adjusts the amplitude of the audio.
+    :param audio: AudioSegment object.
+    :param gain_in_dB: Amount of gain to apply in dB. Positive values increase volume, negative values decrease it.
+    :return: AudioSegment object with adjusted amplitude.
+    """
+    return audio + gain_in_dB
+
+def speed_up_audio(audio, speed_factor):
+    """
+    Accelerates the audio by the given speed factor. Equivalent to changing frequency of audio
+    :param audio: AudioSegment object.
+    :param speed_factor: Speed up factor (e.g., 2.0 to double the speed).
+    :return: AudioSegment object with modified speed.
+    """
+    return audio.speedup(playback_speed=speed_factor)
+
+def distort(audio_segment, threshold=0.6):
+    samples = audio_segment.get_array_of_samples()
+
+    # Applica una funzione non lineare a ciascun campione
+    distorted_samples = [int(sample * threshold) if abs(sample) < threshold * audio_segment.max_possible_amplitude else int(audio_segment.max_possible_amplitude if sample > 0 else -audio_segment.max_possible_amplitude) for sample in samples]
+
+    # Converte la lista di campioni distorti in un array
+    np_samples = np.array(distorted_samples, dtype=np.int16)
+
+    # Crea un nuovo segmento audio dai campioni distorti
+    distorted_audio = audio_segment._spawn(np_samples.tobytes())
+
+    return distorted_audio
+
+# Carica il file audio
+audio = AudioSegment.from_file("../app/core/trimmed_Elettronica 2019-03-04 pt 1.wav")
+
+# Ottieni il livello sonoro in dB
+loudness = audio.dBFS
+print(f"Loudness: {loudness} dB")
+
+# Applica trasformazioni all'audio
+noisy_audio = apply_noise(audio, 0.0000001)
+noisy_audio = speed_up_audio(noisy_audio, 1.5)
+# noisy_audio = change_amplitude(noisy_audio, 500)
+# noisy_audio = distort(noisy_audio, 0.2)  # Usa la funzione distort fornita precedentemente
+
+# Esporta l'audio modificato
+noisy_audio.export("noisy_audio.mp3", format="mp3")
+
+# Invia l'audio a un server locale per la trasformazione in testo (STT)
+with open('noisy_audio.mp3', 'rb') as f:
+    filedata = f.read()
+
+start_time = time.time()
 res = requests.post('http://localhost:9999/api/stt', data=filedata).json()
+end_time = time.time()
+
+elapsed_time = (end_time - start_time) * 1000  # Converti in millisecondi
 
 print(res)
-
-'''
-test command line
-import subprocess
-
-# Carica il file AAC
-audio = AudioSegment.from_file(path, format="aac")
-
-# Estrai i primi tre minuti (180000 millisecondi)
-three_minutes = 1 * 60 * 1000  # 3 minuti in millisecondi
-audio = audio[1 * 60 * 1000: 2 * 60 * 1000]
-
-# Salva come WAV in un file temporaneo
-temp_path = "temp.wav"
-audio.export(temp_path, format="wav")
-print(f"File converted and saved to {temp_path}")
-
-# Definisci il comando come una lista di stringhe
-comando = f"whisper {temp_path} --language it --model medium --task transcribe "
-
-# Esegui il comando
-processo = subprocess.run(comando, stdout=subprocess.PIPE, stderr=subprocess.PIPE,  text=True, encoding='utf-8')
-
-# Ottenere l'output e l'errore (se presente)
-output = processo.stdout
-errore = processo.stderr
-
-# Stampa l'output e l'errore
-print(f'Output: {output}')
-print(f'Errore: {errore}')
-os.remove(temp_path)
-'''
+print(f"Tempo impiegato: {elapsed_time:.2f} ms")
