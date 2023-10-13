@@ -4,7 +4,7 @@ import requests
 import whisper
 from pydub import AudioSegment
 
-filedata = open('../core/trimmed_Elettronica 2019-03-04 pt 1.wav', 'rb').read()
+filedata = open('../core/Recording 2023-10-13 22_57_22.mp3', 'rb').read()
 
 res = requests.post('http://localhost:9999/api/stt', data=filedata).json()
 

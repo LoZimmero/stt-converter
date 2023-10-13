@@ -115,7 +115,7 @@ def transcribe(audio_filepath: str) -> str:
         return transcription
     else:
         model = whisper.load_model(whisper_size).to(device)
-        result = model.transcribe(audio_filepath)
+        result = model.transcribe(audio_filepath,language="it")
         print(result['text'])
         return result["text"]
 
