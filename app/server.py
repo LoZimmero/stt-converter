@@ -18,6 +18,13 @@ def create_app():
     def stt_controller():
         audio = request.data
 
+        if not audio:
+            return Response(json.dumps({
+                "status": "KO",
+                "data": None,
+                "error-message": f"Invalid body passed: {audio}"
+            }), status=500)
+
         audio_chunks = split(audio, MAX_FILE_SIZE_MB * 1024 * 1024)
 
         res = []
