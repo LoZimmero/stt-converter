@@ -29,6 +29,7 @@ def split(file_data: bytes, max_file_size: int) -> list:
 
 
 def transcribe(audio_filepath: str, MODEL: str = MODEL) -> str:
+    global model
     # Check if valid input
     if not audio_filepath or not MODEL:
         return []
