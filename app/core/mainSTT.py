@@ -1,14 +1,15 @@
 import librosa
-from pydub import AudioSegment, silence
-import whisper
 import torch
+import whisper
+from pydub import silence, AudioSegment
+
 from transformers import (
     Wav2Vec2ForCTC,
     Wav2Vec2Processor,
 )
 
 MODEL = "whisper"
-whisper_size="tiny"
+whisper_size="medium"
 already_chunked= True
 
 model_name = "facebook/wav2vec2-large-xlsr-53-italian"
@@ -19,17 +20,27 @@ processor = Wav2Vec2Processor.from_pretrained(model_name)
 
 
 def split(file_data: bytes, max_file_size: int) -> list:
+    if not file_data or not max_file_size or max_file_size < 1:
+        return []
     res = []
     for i in range(0, len(file_data), max_file_size):
         res.append(file_data[i:i + max_file_size])
     return res
 
 
-def transcribe(audio_filepath: str) -> str:
+def transcribe(audio_filepath: str, MODEL: str = MODEL) -> str:
+    # Check if valid input
+    if not audio_filepath or not MODEL:
+        return []
+    
     if (MODEL == "legacy"):
         audio_path = audio_filepath
 
-        speech, sr = librosa.load(audio_path, sr=16000, mono=True)
+        try:
+            speech, sr = librosa.load(audio_path, sr=16000, mono=True)
+        except Exception as e:
+            print("Failed to load file at",audio_filepath, "for the following reason: ", e)
+            return []
 
         speech = speech[:(sr * 10)]
 
