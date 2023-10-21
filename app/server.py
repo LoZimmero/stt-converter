@@ -1,10 +1,11 @@
 import json
-import re
 import uuid
 from flask import Flask, request, Response
 import os
 
-from app.core.mainSTT import transcribe, split
+from core.mainSTT import transcribe, split
+from core.models import TranscriptionRequest
+from utils.utils import parse_request
 
 def create_app():
     app = Flask(__name__)
@@ -16,14 +17,26 @@ def create_app():
 
     @app.route('/api/stt', methods=['POST'])
     def stt_controller():
-        audio = request.data
-
-        if not audio:
+        req_data: str = None
+        try:
+            req_data = str(request.data, encoding='utf-8')
+            req_data = json.loads(req_data)
+        except Exception as e:
             return Response(json.dumps({
                 "status": "KO",
                 "data": None,
-                "error-message": f"Invalid body passed: {audio}"
+                "error-message": f"Invalid body passed: {str(request.data, encoding='utf-8')}"
             }), status=500)
+        parsed_request = parse_request(req_data)
+        if not parsed_request or not parsed_request.audio_bytes: # Check also if audio_bytes is present, otherwise cannot proceed
+            return Response(json.dumps({
+                "status": "KO",
+                "data": None,
+                "error-message": f"Parsed body is missing some needed values: {req_data}"
+            }), status=500)
+        
+        audio = parsed_request.audio_bytes
+        audio_format = parsed_request.audio_format
 
         audio_chunks = split(audio, MAX_FILE_SIZE_MB * 1024 * 1024)
 
