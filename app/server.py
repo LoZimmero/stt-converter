@@ -3,9 +3,9 @@ import uuid
 from flask import Flask, request, Response
 import os
 
-from app.core.mainSTT import transcribe, split
-from app.core.models import TranscriptionRequest
-from app.utils.utils import parse_request
+from core.mainSTT import transcribe, split
+from core.models import TranscriptionRequest
+from utils.utils import parse_request
 
 def create_app():
     app = Flask(__name__)
@@ -17,18 +17,16 @@ def create_app():
 
     @app.route('/api/stt', methods=['POST'])
     def stt_controller():
-
-       
-        req_data = None
+        req_data: str = None
         try:
-            req_data = request.json  # If payload is not a valid json, automatically raise error 400 (BadRequest exception)
+            req_data = str(request.data, encoding='utf-8')
+            req_data = json.loads(req_data)
         except Exception as e:
             return Response(json.dumps({
                 "status": "KO",
                 "data": None,
                 "error-message": f"Invalid body passed: {str(request.data, encoding='utf-8')}"
             }), status=500)
-        
         parsed_request = parse_request(req_data)
         if not parsed_request or not parsed_request.audio_bytes: # Check also if audio_bytes is present, otherwise cannot proceed
             return Response(json.dumps({

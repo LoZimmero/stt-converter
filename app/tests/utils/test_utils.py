@@ -17,11 +17,11 @@ def test_parse_request_missing_values():
 
 
 def test_parse_request_missing_bytes():
-    res = utils.parse_request({"format":"wav"})
+    res = utils.parse_request({"audio_format":"wav"})
     assert res.audio_bytes == None
     assert res.audio_format == 'wav'
 
 def test_parse_request_complete():
-    res = utils.parse_request({"format":"wav", 'bytes': [1,2,4,2,4,2]})
+    res = utils.parse_request({"audio_format":"wav", 'audio_bytes': [1,2,4,2,4,2]})
     assert res.audio_bytes == [1,2,4,2,4,2]
     assert res.audio_format == 'wav'
