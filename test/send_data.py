@@ -1,3 +1,5 @@
+import json
+import os
 import time
 
 import numpy as np
@@ -64,22 +66,23 @@ print(f"Loudness: {loudness} dB")
 
 # Applica trasformazioni all'audio
 noisy_audio = apply_noise(audio, 0.0000001)
-noisy_audio = speed_up_audio(noisy_audio, 1.5)
+# noisy_audio = speed_up_audio(noisy_audio, 1.5)
 # noisy_audio = change_amplitude(noisy_audio, 500)
-# noisy_audio = distort(noisy_audio, 0.2)  # Usa la funzione distort fornita precedentemente
+# noisy_audio = distort(noisy_audio, 0.2)
 
 # Esporta l'audio modificato
-noisy_audio.export("noisy_audio.mp3", format="mp3")
+exported_filename = "noisy_audio.mp3"
+noisy_audio.export(exported_filename, format="mp3")
 
 # Invia l'audio a un server locale per la trasformazione in testo (STT)
-with open('noisy_audio.mp3', 'rb') as f:
-    filedata = f.read()
-
-start_time = time.time()
-res = requests.post('http://localhost:9999/api/stt', data=filedata).json()
-end_time = time.time()
+with open(exported_filename, 'rb') as f:
+    files = {'audio': f}
+    start_time = time.time()
+    res = requests.post('http://localhost:9999/api/stt', files=files).json()
+    end_time = time.time()
 
 elapsed_time = (end_time - start_time) * 1000  # Converti in millisecondi
 
 print(res)
 print(f"Tempo impiegato: {elapsed_time:.2f} ms")
+os.remove(exported_filename)
