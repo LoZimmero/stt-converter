@@ -1,7 +1,9 @@
+import os
+
 import torch
 from transformers import pipeline
 
-model_name = "openai/whisper-medium"
+model_name = "openai/whisper-tiny"
 device = "cuda:0" if torch.cuda.is_available() else "cpu"
 
 def split(file_data: bytes, max_file_size: int) -> list:
@@ -16,8 +18,8 @@ def split(file_data: bytes, max_file_size: int) -> list:
 def transcribe(audio_filepath: str, MODEL: str = model_name) -> str:
 
     # Check if valid input
-    if not audio_filepath or not MODEL:
-        return []
+    if not audio_filepath or not MODEL or not os.path.exists(audio_filepath):
+        return ""
 
     print(device)
 

@@ -1,12 +1,11 @@
+import os
+import tempfile
+
 import pytest
 from Levenshtein import ratio
-from app.utils.utils import apply_noise, change_amplitude, speed_up_audio, distort
-from app.core.mainSTT import transcribe
-import sys
-import tempfile
-import os
 
-sys.path.append('C:\\Users\\fonde\\PycharmProjects\\stt-converter\\')
+from app.core.mainSTT import transcribe
+from app.utils.utils import apply_noise, change_amplitude, speed_up_audio, distort
 
 
 def compute_similarity(reference, transcription):
