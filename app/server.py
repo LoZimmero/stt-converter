@@ -35,6 +35,7 @@ def create_app():
 
         # Assuming you want to save the file, though it's not necessary
         filename = str(uuid.uuid4()) + ".wav"
+        os.makedirs('data', exist_ok=True)
         with open(f'data/{filename}', 'wb') as f:
             f.write(audio)
 
