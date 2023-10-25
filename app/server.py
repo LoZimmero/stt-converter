@@ -3,9 +3,7 @@ import uuid
 from flask import Flask, request, Response
 import os
 
-from core.mainSTT import transcribe
-from core.models import TranscriptionRequest
-from utils.utils import parse_request
+from app.core.mainSTT import transcribe
 
 
 def create_app():
@@ -13,7 +11,6 @@ def create_app():
     MAX_FILE_SIZE_MB = int(os.environ.get('MAX_FILE_SIZE_MB', default=5))
     print("MAX_FILE_SIZE_MB:", MAX_FILE_SIZE_MB)
 
-    @app.route('/api/stt', methods=['POST'])
     @app.route('/api/stt', methods=['POST'])
     def stt_controller():
         if 'audio' not in request.files:

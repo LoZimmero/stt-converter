@@ -1,7 +1,7 @@
 import torch
 from transformers import pipeline
 
-model_name = "openai/whisper-tiny"
+model_name = "openai/whisper-medium"
 device = "cuda:0" if torch.cuda.is_available() else "cpu"
 
 def split(file_data: bytes, max_file_size: int) -> list:
@@ -36,7 +36,7 @@ def transcribe(audio_filepath: str, MODEL: str = model_name) -> str:
     return prediction["text"]
 
 def main():
-    transcribe('trimmed_Elettronica 2019-03-04 pt 1.wav')
+    transcribe('../tests/resources/trimmed_Elettronica 2019-03-04 pt 1.wav')
 
 
 if __name__ == '__main__':
