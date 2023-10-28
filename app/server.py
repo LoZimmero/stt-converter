@@ -1,11 +1,9 @@
 import json
-import socket
 import uuid
 from flask import Flask, request, Response
 import os
 
 from app.core.mainSTT import transcribe
-from zeroconf import ServiceInfo, Zeroconf
 
 
 def create_app():
@@ -65,31 +63,14 @@ def create_app():
     def index() -> Response:
         return Response("<h1>Welcome!</h1><h2>API is at endpoint <b>/api/stt</b></h2>", status=200)
 
+    @app.route("/henlo", methods=["GET"])
+    def henlo():
+        return "henlo"
+
     return app
 
 
-
-
-
-def register_mdns_service():
-    info = ServiceInfo(
-        "_http._tcp.local.",
-        "MyFlaskApp._http._tcp.local.",
-        addresses=[socket.inet_aton("0.0.0.0")],
-        port=9999,
-        properties={'path': '/'},
-        server="MyFlaskApp.local.",
-    )
-
-    zeroconf = Zeroconf()
-    print("Registration of a service...")
-    zeroconf.register_service(info)
-    return zeroconf
-
-
 def main():
-    zeroconf_instance = register_mdns_service()
-
     app = create_app()
     app.run(
         host='0.0.0.0',
@@ -97,8 +78,6 @@ def main():
         debug=False,
         load_dotenv=True
     )
-
-    zeroconf_instance.close()
 
 
 if __name__ == '__main__':
