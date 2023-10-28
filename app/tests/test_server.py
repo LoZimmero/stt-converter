@@ -1,10 +1,10 @@
 import io
-import os
 import json
-import tempfile
-from app.server import create_app
+import os
 
 import pytest
+
+from app.server import create_app
 
 
 @pytest.fixture
@@ -60,9 +60,11 @@ def test_stt_with_large_file():
 
 def test_stt_ok(client):
     """ Test the /api/stt endpoint with a valid audio file """
-    with open('./app/tests/resources/test.wav', 'rb') as f:
+    test_wav_path = os.path.join(os.path.dirname(__file__), 'resources', 'test.wav')
+    with open(test_wav_path, 'rb') as f:
         response = client.post('/api/stt', content_type='multipart/form-data',
                                data={"audio": (f, "test.wav")})
+
     assert response.status_code == 200
     assert json.loads(response.data)['status'] == "OK"
 

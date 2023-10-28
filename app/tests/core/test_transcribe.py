@@ -1,3 +1,5 @@
+import os
+
 from app.core.mainSTT import transcribe
 
 
@@ -6,11 +8,12 @@ def test_transcribe_null_path():
     assert data == ""
 
 
-def test_transcribe_non_existsing_file():
+def test_transcribe_non_existing_file():
     data = transcribe('./aaaa/bbbbb')
     assert data == ""
 
 
 def test_transcribe_ok():
-    data = transcribe('./app/tests/resources/test.wav')
+    test_wav_path = os.path.join(os.path.dirname(__file__), '..', 'resources', 'test.wav')
+    data = transcribe(test_wav_path)
     assert 'ciao' in data.lower()

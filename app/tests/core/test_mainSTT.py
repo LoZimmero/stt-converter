@@ -25,8 +25,8 @@ def load_reference(reference_file):
      (distort, 0.2)]
 )
 def test_transcription_similarity(audio_modifier, para):
-    original_audio = ('./app/tests/resources/trimmed_Elettronica 2019-03-04 pt 1.wav')
-    reference_transcription = load_reference('./app/tests/resources/reference_transcription.txt')
+    original_audio = os.path.join(os.path.dirname(__file__), '..', 'resources', 'trimmed_Elettronica 2019-03-04 pt 1.wav')
+    reference_transcription = os.path.join(os.path.dirname(__file__), '..', 'resources', 'reference_transcription.txt')
 
     # Use a temporary directory to save the modified audio
     with tempfile.TemporaryDirectory() as tmpdirname:
@@ -35,7 +35,6 @@ def test_transcription_similarity(audio_modifier, para):
         modified_audio = audio_modifier(original_audio, para)
 
         # Assuming `modified_audio` is a waveform, save it to the temporary WAV file.
-        # Depending on your implementation, you might need a function here to save the waveform to WAV.
         modified_audio.export(temp_audio_path, format="wav")
 
         prediction = transcribe(temp_audio_path)
