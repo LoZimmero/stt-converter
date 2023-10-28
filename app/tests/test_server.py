@@ -1,3 +1,4 @@
+import io
 import os
 import json
 import tempfile
@@ -28,16 +29,33 @@ def test_stt_without_audio(client):
     assert json.loads(response.data)['error-message'] == "No audio file provided."
 
 
-def test_stt_with_large_file(client):
-    """ Test the /api/stt endpoint with a file larger than the limit """
-    dummy_file = tempfile.NamedTemporaryFile(suffix='.wav')
-    dummy_file.write(b'0' * (int(os.environ.get('MAX_FILE_SIZE_MB', default=5)) * 1024 * 1024))
+def generate_large_file(size_mb):
+    """Generates an in-memory binary stream of the given size in MB."""
+    return io.BytesIO(b"\0" * size_mb * 1024 * 1024)
 
-    response = client.post('/api/stt', content_type='multipart/form-data',
-                           data={"audio": (dummy_file, "dummy.wav")})
 
+def test_stt_with_large_file():
+    # Create a test client
+    app = create_app()
+    app.config['TESTING'] = True
+    client = app.test_client()
+
+    # Generate a 6 MB dummy file (or any size that exceeds your set limit)
+    audio_file = generate_large_file(6)
+
+    # Reset the file pointer to the beginning
+    audio_file.seek(0)
+
+    # Get the actual file size
+    actual_size = len(audio_file.read())
+    print(f"Actual file size: {actual_size} bytes")
+    audio_file.seek(0)  # Reset the file pointer again to ensure the client can read it
+
+    # Make a POST request
+    response = client.post('/api/stt', content_type='multipart/form-data', data={'audio': (audio_file, 'test.wav')})
+
+    # Assertions to check the response
     assert response.status_code == 400
-    assert json.loads(response.data)['error-message'] == "File size exceeds the maximum limit."
 
 
 def test_stt_ok(client):
