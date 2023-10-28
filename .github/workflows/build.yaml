@@ -40,6 +40,7 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y libsndfile1-dev
+        sudo apt-get install -y ffmpeg
     - name: Test with pytest and generate coverage report
       run: |
         pytest --cov --cov-report=html:coverage_re
