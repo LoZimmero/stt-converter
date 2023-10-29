@@ -26,7 +26,7 @@ def load_reference(reference_file):
 )
 def test_transcription_similarity(audio_modifier, para):
     original_audio = os.path.join(os.path.dirname(__file__), '..', 'resources', 'trimmed_Elettronica 2019-03-04 pt 1.wav')
-    reference_transcription = os.path.join(os.path.dirname(__file__), '..', 'resources', 'reference_transcription.txt')
+    reference_transcription = load_reference(os.path.join(os.path.dirname(__file__), '..', 'resources', 'reference_transcription.txt'))
 
     # Use a temporary directory to save the modified audio
     with tempfile.TemporaryDirectory() as tmpdirname:
