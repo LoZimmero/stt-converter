@@ -21,6 +21,10 @@ def test_index(client):
     response = client.get('/')
     assert b'Welcome!' in response.data
 
+def test_index(client):
+    """ Test the index endpoint """
+    response = client.get('/henlo')
+    assert b'henlo' in response.data
 
 def test_stt_without_audio(client):
     """ Test the /api/stt endpoint without audio """
