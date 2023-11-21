@@ -63,6 +63,10 @@ def create_app():
     def index() -> Response:
         return Response("<h1>Welcome!</h1><h2>API is at endpoint <b>/api/stt</b></h2>", status=200)
 
+    @app.route("/henlo", methods=["GET"])
+    def henlo():
+        return "henlo"
+
     return app
 
 
