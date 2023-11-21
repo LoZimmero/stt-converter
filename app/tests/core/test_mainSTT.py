@@ -13,7 +13,7 @@ def compute_similarity(reference, transcription):
 
 
 def load_reference(reference_file):
-    with open(reference_file, 'r') as file:
+    with open(reference_file, 'rb') as file:
         return file.read().strip()
 
 
