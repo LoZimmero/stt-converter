@@ -1,3 +1,5 @@
+Questo server si occupa del servizio di trascrizione per l'applicazione https://github.com/S-Federico/Sbobinator9000 , va utilizzato connettendo sia server che client alla stessa rete.
+
 # Istruzioni per l'uso
 
 ## Intallare ffmpeg sulla macchina che esegue il server
@@ -11,7 +13,7 @@ E' possibile installare tutte le dipendenze necessarie con il seguente comando:
 pip install -r requirements.txt
 ```
 
-## 2. Lanciare il server
+## 2. Avviare il server
 
 Basta eseguire il file *server.py*
 
